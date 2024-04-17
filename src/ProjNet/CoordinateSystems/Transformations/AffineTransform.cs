@@ -471,7 +471,16 @@ namespace ProjNet.CoordinateSystems.Transformations
         /// </summary>
         public override void Invert()
         {
-            throw new NotSupportedException("The method or operation is not supported.");
+            double[,] invMatrix = InvertMatrix((double[,])_transformMatrix.Clone());
+            int rowCnt = _transformMatrix.GetLength(0);
+            int colCnt = _transformMatrix.GetLength(1);
+            for (int row = 0; row < rowCnt; row++)
+            {
+                for (int col = 0; col < colCnt; col++)
+                {
+                    _transformMatrix[row, col] = invMatrix[row, col];
+                }
+            }
         }
 
 
