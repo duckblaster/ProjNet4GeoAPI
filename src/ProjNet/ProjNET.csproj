@@ -6,6 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <EnableApiCompat>false</EnableApiCompat>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly Info">
@@ -28,13 +29,6 @@ Proj.NET performs point-to-point coordinate conversions between geodetic coordin
     <PackageReference Include="System.Memory" Version="4.5.3" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
-
-    <PropertyGroup Condition="'$(SuppressXmlDocWarnings)'==''">
-        <SuppressXmlDocWarnings>false</SuppressXmlDocWarnings>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(SuppressXmlDocWarnings)'=='true'">
-        <NoWarn>$(NoWarn);CS1574;CS1591</NoWarn>
-    </PropertyGroup>
 
 	<ItemGroup Condition=" '$(EnableApiCompat)' == 'true' ">
 		<PackageReference Include="Microsoft.DotNet.ApiCompat" Version="6.0.0-beta.21159.11" PrivateAssets="All" />
