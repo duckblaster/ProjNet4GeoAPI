@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using ProjNet.CoordinateSystems.Transformations;
 
@@ -26,20 +27,20 @@ namespace ProjNet.CoordinateSystems.Projections
             Register("pseudo-mercator", typeof(PseudoMercator));
             Register("popular_visualisation pseudo-mercator", typeof(PseudoMercator));
             Register("google_mercator", typeof(PseudoMercator));
-			
+            
             Register("transverse_mercator", typeof(TransverseMercator));
             Register("gauss_kruger", typeof(TransverseMercator));
 
             Register("albers", typeof(AlbersProjection));
-			Register("albers_conic_equal_area", typeof(AlbersProjection));
+            Register("albers_conic_equal_area", typeof(AlbersProjection));
 
-			Register("krovak", typeof(KrovakProjection));
+            Register("krovak", typeof(KrovakProjection));
 
-			Register("polyconic", typeof(PolyconicProjection));
-			
+            Register("polyconic", typeof(PolyconicProjection));
+            
             Register("lambert_conformal_conic", typeof(LambertConformalConic2SP));
-			Register("lambert_conformal_conic_2sp", typeof(LambertConformalConic2SP));
-			Register("lambert_conic_conformal_(2sp)", typeof(LambertConformalConic2SP));
+            Register("lambert_conformal_conic_2sp", typeof(LambertConformalConic2SP));
+            Register("lambert_conic_conformal_(2sp)", typeof(LambertConformalConic2SP));
 
             Register("lambert_azimuthal_equal_area", typeof(LambertAzimuthalEqualAreaProjection));
 
@@ -56,7 +57,11 @@ namespace ProjNet.CoordinateSystems.Projections
         /// </summary>
         /// <param name="name"></param>
         /// <param name="type"></param>
-        public static void Register(string name, Type type)
+        public static void Register(string name,
+#if NET8_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+#endif
+        Type type)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -97,10 +102,15 @@ namespace ProjNet.CoordinateSystems.Projections
         /// </summary>
         /// <param name="aliasName"></param>
         /// <param name="existingName"></param>
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2067",
+            Justification = "The list only contains types stored through the annotated setter.")]
+#endif
         public static void RegisterAlias(string aliasName, string existingName)
         {
             lock (RegistryLock)
             {
+
                 if (!TypeRegistry.TryGetValue(ProjectionNameToRegistryKey(existingName), out var existingProjectionType))
                 {
                     throw new ArgumentException($"{existingName} is not a registered projection type");
@@ -110,7 +120,11 @@ namespace ProjNet.CoordinateSystems.Projections
             }
         }
 
-        private static Type CheckConstructor(Type type)
+        private static Type CheckConstructor(
+#if NET8_0_OR_GREATER
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+#endif
+        Type type)
         {
             // find a constructor that accepts exactly one parameter that's an
             // instance of List<ProjectionParameter>, and then return the exact
@@ -128,6 +142,10 @@ namespace ProjNet.CoordinateSystems.Projections
             return null;
         }
 
+#if NET8_0_OR_GREATER
+        [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2067",
+            Justification = "The list only contains types stored through the annotated setter.")]
+#endif
         internal static MathTransform CreateProjection(string className, IEnumerable<ProjectionParameter> parameters)
         {
             string key = ProjectionNameToRegistryKey(className);

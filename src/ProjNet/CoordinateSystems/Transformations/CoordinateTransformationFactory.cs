@@ -80,7 +80,7 @@ namespace ProjNet.CoordinateSystems.Transformations
 		}
 		#endregion
 
-		private static void SimplifyTrans(ConcatenatedTransform mtrans, ref List<ICoordinateTransformationCore> MTs)
+		public static void SimplifyTrans(ConcatenatedTransform mtrans, ref List<ICoordinateTransformationCore> MTs)
 		{
 			foreach(var t in mtrans.CoordinateTransformationList)
 			{

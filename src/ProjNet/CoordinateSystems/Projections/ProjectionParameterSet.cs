@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace ProjNet.CoordinateSystems.Projections
@@ -16,6 +17,9 @@ namespace ProjNet.CoordinateSystems.Projections
         /// <summary>
         /// Needed for serialzation
         /// </summary>
+#if NET8_0_OR_GREATER
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+#endif
         public ProjectionParameterSet(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
             :base(info, context)
         {}
